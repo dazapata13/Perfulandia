@@ -14,6 +14,4 @@ public class ClienteDTO {
 
     @Size(min = 9, message = "El telefono debe tener al menos 9 dígitos")
     private String telefono;
-}}
-
-//asdnklasndklas
+}
