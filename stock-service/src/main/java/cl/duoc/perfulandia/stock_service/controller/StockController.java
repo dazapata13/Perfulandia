@@ -1,24 +1,31 @@
-package main.java.cl.duoc.perfulandia.stock_service.controller;
+package cl.duoc.perfulandia.stock_service.controller;
 
-import cl.duoc.perfulandia.stock_service.dto.StockDTO;
-import cl.duoc.perfulandia.stock_service.service.StockService;
+import cl.duoc.perfulandia.stock_service.BaseController.BaseController;
+import cl.duoc.perfulandia.stock_service.model.Stock;
+import cl.duoc.perfulandia.stock_service.repository.StockRepository;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/stock")
-public class StockController {
+@Tag(name = "Stock", description = "Gestión de inventario físico y bodegaje")
+public class StockController extends BaseController {
 
     @Autowired
-    private StockService service;
+    private StockRepository stockRepository;
 
-    @GetMapping("/{productoId}")
-    public StockDTO verStock(@PathVariable Long productoId) {
-        return service.obtenerPorProducto(productoId);
+    @Operation(summary = "Ver disponibilidad de stock")
+    @GetMapping
+    public ResponseEntity<?> listarTodo() {
+        return successResponse(stockRepository.findAll(), "Inventario de stock recuperado");
     }
 
+    @Operation(summary = "Actualizar niveles de stock")
     @PostMapping("/actualizar")
-    public StockDTO actualizar(@RequestBody StockDTO dto) {
-        return service.actualizarStock(dto);
+    public ResponseEntity<?> actualizar(@RequestBody Stock stock) {
+        return successResponse(stockRepository.save(stock), "Stock actualizado correctamente");
     }
 }
