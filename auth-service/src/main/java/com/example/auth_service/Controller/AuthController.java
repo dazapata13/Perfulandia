@@ -1,26 +1,23 @@
 package com.example.auth_service.Controller;
 
-import com.example.auth_service.dto.UsuarioDTO;
-import com.example.auth_service.model.Usuario;
-import com.example.auth_service.service.AuthService;
-import org.springframework.beans.factory.annotation.Autowired;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/auth")
-public class AuthController {
+@Tag(name = "Autenticación", description = "Servicio de Usuarios de Perfulandia")
+public class AuthController extends BaseController { // <--- HEREDAR AQUÍ
 
     @Autowired
     private AuthService authService;
 
+    @Operation(summary = "Registro", description = "Crea un nuevo usuario")
     @PostMapping("/registrar")
-    public Usuario registrar(@RequestBody UsuarioDTO usuarioDTO) {
-        return authService.registrarUsuario(usuarioDTO);
-    }
+    public ResponseEntity<?> registrar(@RequestBody UsuarioDTO usuarioDTO) {
+        var resultado = authService.registrarUsuario(usuarioDTO);
 
-    @GetMapping("/usuarios")
-    public List<Usuario> listar() {
-        return authService.obtenerTodos();
+        return successResponse(resultado, "Usuario creado con éxito");
     }
 }

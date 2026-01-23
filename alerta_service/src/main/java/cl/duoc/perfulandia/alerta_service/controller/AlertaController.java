@@ -1,21 +1,23 @@
-package cl.duoc.perfulandia.alerta_service.controller;
+package cl.duoc.perfulandia.alerta_service.controllers;
 
-import cl.duoc.perfulandia.alerta_service.DTO.AlertaDTO;
-import cl.duoc.perfulandia.alerta_service.model.Alerta;
-import cl.duoc.perfulandia.alerta_service.service.AlertaService;
-import org.springframework.beans.factory.annotation.Autowired;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/alertas")
-public class AlertaController {
+@RequestMapping("/api/alerta")
+@Tag(name = "Controlador de Alertas", description = "Endpoints para gestionar las alertas de Perfulandia")
+public class AlertaController extends BaseController { 
+    
+    @Operation(summary = "Listar alertas", description = "Retorna todas las alertas de stock de la base de datos")
+    @GetMapping
+    public ResponseEntity<?> obtenerTodas() {
+        try {
 
-    @Autowired
-    private AlertaService alertaService;
-
-    @PostMapping("/notificar")
-    public Alerta crearAlerta(@RequestBody AlertaDTO dto) {
-        return alertaService.procesarStockBajo(dto);
+            return successResponse("Lista de alertas", "Operación exitosa");
+        } catch (Exception e) {
+            return errorResponse("Error al obtener alertas", 500);
+        }
     }
 }
-//ASHDKBNASKDJBNAS
