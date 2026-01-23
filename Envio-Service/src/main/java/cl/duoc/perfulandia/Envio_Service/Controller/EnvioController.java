@@ -1,19 +1,36 @@
-package cl.duoc.perfulandia.Envio_Service.Controller;
+package cl.duoc.perfulandia.Envio_Service.controller;
 
-import cl.duoc.perfulandia.Envio_Service.DTO.EnvioDTO;
+import cl.duoc.perfulandia.Envio_Service.BaseController.BaseController;
 import cl.duoc.perfulandia.Envio_Service.model.Envio;
-import cl.duoc.perfulandia.Envio_Service.service.EnvioService;
+import cl.duoc.perfulandia.Envio_Service.repository.EnvioRepository;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
+
 @RestController
-@RequestMapping("/api/envios")
-public class EnvioController {
+@RequestMapping("/api/envio")
+@Tag(name = "Envíos", description = "Servicio de logística y seguimiento")
+public class EnvioController extends BaseController {
 
     @Autowired
-    private EnvioService envioService;
+    private EnvioRepository envioRepository;
 
-    @PostMapping("/despachar")
-    public Envio despachar(@RequestBody EnvioDTO dto) {
-        return envioService.prepararDespacho(dto);
+    @Operation(summary = "Ver todos los envíos")
+    @GetMapping
+    public ResponseEntity<?> listarTodos() {
+        return successResponse(envioRepository.findAll(), "Lista de envíos obtenida");
+    }
+
+    @Operation(summary = "Generar un nuevo envío")
+    @PostMapping("/generar")
+    public ResponseEntity<?> generarEnvio(@RequestBody Envio envio) {
+
+        envio.setCodigoSeguimiento("TRK-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase());
+        envio.setEstado("PREPARANDO");
+        return successResponse(envioRepository.save(envio), "Envío generado con éxito");
     }
 }

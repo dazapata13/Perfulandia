@@ -1,31 +1,31 @@
 package cl.duoc.perfulandia.cliente_service.controller;
 
-import cl.duoc.perfulandia.cliente_service.dto.ClienteDTO;
+import cl.duoc.perfulandia.cliente_service.BaseController.BaseController; // Tu archivo de la foto
 import cl.duoc.perfulandia.cliente_service.model.Cliente;
-import cl.duoc.perfulandia.cliente_service.service.ClienteService;
-import jakarta.validation.Valid;
+import cl.duoc.perfulandia.cliente_service.repository.ClienteRepository;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/clientes")
-public class ClienteController {
+@Tag(name = "Clientes", description = "Gestión de clientes")
+public class ClienteController extends BaseController { //aqui se eredo
 
     @Autowired
-    private ClienteService service;
+    private ClienteRepository clienteRepository;
 
+    @Operation(summary = "Listar clientes")
     @GetMapping
-    public List<Cliente> listar() {
-        return service.obtenerTodos();
+    public ResponseEntity<?> listar() {
+        return successResponse(clienteRepository.findAll(), "Lista cargada");
     }
 
+    @Operation(summary = "Crear cliente")
     @PostMapping
-    public Cliente crear(@Valid @RequestBody ClienteDTO clienteDto) {
-        Cliente cliente = new Cliente();
-        cliente.setNombre(clienteDto.getNombre());
-        cliente.setEmail(clienteDto.getEmail());
-        cliente.setTelefono(clienteDto.getTelefono());
-        return service.guardarCliente(cliente);
+    public ResponseEntity<?> crear(@RequestBody Cliente cliente) {
+        return successResponse(clienteRepository.save(cliente), "Cliente creado");
     }
 }
