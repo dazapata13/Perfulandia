@@ -13,6 +13,7 @@ public class Producto {
     
     private String nombre;
     private String marca;
+    private String descripcion;
     private Double precio;
-    private Integer stockMinimo;
+    private String sku; // Código único para el catálogo
 }
