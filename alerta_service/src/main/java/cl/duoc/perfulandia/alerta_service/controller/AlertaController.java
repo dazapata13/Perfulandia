@@ -18,3 +18,5 @@ public class AlertaController {
         return alertaService.procesarStockBajo(dto);
     }
 }
+
+///ASNDKAS
