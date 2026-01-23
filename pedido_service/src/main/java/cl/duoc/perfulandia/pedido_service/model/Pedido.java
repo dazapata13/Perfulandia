@@ -13,9 +13,15 @@ public class Pedido {
     private Long id;
     
     private Long clienteId;
-    private LocalDateTime fechaPedido;
-    private Double total;
-    
+    private Long productoId;
+    private Integer cantidad;
+    private Double montoTotal;
+    private String estado; // Ejemplo: PENDIENTE, COMPLETADO, CANCELADO
+    private LocalDateTime fechaCreacion;
 
-    private String estado; 
+    @PrePersist //Es una anotación de JPA (Java Persistence API). Le dice a Spring Boot: 
+    // "Oye, justo antes de insertar este registro por primera vez en la base de datos (antes del INSERT), ejecuta este método".
+    protected void onCreate() {
+        fechaCreacion = LocalDateTime.now();
+    }
 }
