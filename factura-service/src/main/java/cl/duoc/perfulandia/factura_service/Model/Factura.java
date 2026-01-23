@@ -1,4 +1,4 @@
-package cl.duoc.perfulandia.factura_service.Model;
+package cl.duoc.perfulandia.factura_service.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -12,9 +12,13 @@ public class Factura {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    private String numeroFactura;
-    private Long ventaId;
-    private String emailCliente;
+    private String folio;
     private Double montoTotal;
     private LocalDateTime fechaEmision;
+    private Long pedidoId;
+
+    @PrePersist
+    protected void onCreate() {
+        fechaEmision = LocalDateTime.now();
+    }
 }
