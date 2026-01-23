@@ -1,33 +1,24 @@
-package cl.duoc.perfulandia.ventas_service.model;
+package cl.duoc.perfulandia.venta_service.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
 import lombok.Data;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "ventas")
 @Data
 public class Venta {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @NotBlank(message = "El nombre del cliente es obligatorio")
-    private String cliente;
-
-    @NotNull(message = "El ID del producto es obligatorio")
-    private Long productoId;
-
-    @Min(value = 1, message = "La cantidad debe ser al menos 1")
-    private Integer cantidad;
-
-    @Positive(message = "El total debe ser un número positivo")
-    private Double total;
-
+    
+    private Long pedidoId;
+    private Double totalPagado;
+    private String metodoPago; // EJ: DEBITO, CREDITO, TRANSFERENCIA
     private LocalDateTime fechaVenta;
 
     @PrePersist
     protected void onCreate() {
-        fechaVenta = LocalDateTime.now();
+        this.fechaVenta = LocalDateTime.now();
     }
 }
